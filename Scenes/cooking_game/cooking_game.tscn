@@ -1,0 +1,73 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmavh1g0scaun"]
+
+[ext_resource type="Script" uid="uid://cikuqf66x4kia" path="res://cooking_game.gd" id="1_g4e8w"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_yd7s5"]
+
+[sub_resource type="Curve2D" id="Curve2D_g4e8w"]
+_data = {
+"points": PackedVector2Array(0, 0, 0, 0, -54.15381, 4.3389893, 0, 0, 0, 0, 2702.7708, 4.3389893)
+}
+point_count = 2
+
+[node name="CookingGame" type="Node2D"]
+script = ExtResource("1_g4e8w")
+
+[node name="Bar" type="Sprite2D" parent="."]
+position = Vector2(600, 544)
+scale = Vector2(4.609375, 0.3984375)
+texture = ExtResource("2_yd7s5")
+
+[node name="PerfectRect" type="ColorRect" parent="Bar"]
+offset_left = -60.745766
+offset_top = -120.47058
+offset_right = -20.745766
+offset_bottom = 240.94116
+color = Color(0.19909212, 0.77061975, 1.540184e-06, 1)
+
+[node name="GoodRect" type="ColorRect" parent="Bar"]
+offset_left = -60.745766
+offset_top = -481.88232
+offset_right = -20.745766
+offset_bottom = -120.47058
+color = Color(0.7915389, 0.6145803, 1.92523e-06, 1)
+
+[node name="BadRect" type="ColorRect" parent="Bar"]
+offset_left = -60.745766
+offset_top = 160.62744
+offset_right = -20.745766
+offset_bottom = 522.0392
+color = Color(0.98039216, 0, 0, 1)
+
+[node name="Path2D" type="Path2D" parent="."]
+position = Vector2(339, 540)
+scale = Vector2(0.20312488, 0.69140637)
+curve = SubResource("Curve2D_g4e8w")
+
+[node name="PathFollow2D" type="PathFollow2D" parent="Path2D"]
+position = Vector2(-54.15381, 4.3389893)
+loop = false
+
+[node name="Pointer" type="Sprite2D" parent="Path2D/PathFollow2D"]
+texture = ExtResource("2_yd7s5")
+
+[node name="Label2" type="Label" parent="."]
+offset_left = 200.0
+offset_top = 96.0
+offset_right = 994.0
+offset_bottom = 163.0
+theme_override_font_sizes/font_size = 48
+text = "Add ingredients in correct order"
+
+[node name="TimesLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 544.0
+offset_top = 32.0
+offset_right = 654.0
+offset_bottom = 99.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 48
+text = "1 / 5 "
+
+[node name="Timer" type="Timer" parent="."]
