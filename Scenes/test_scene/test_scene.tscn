@@ -1,9 +1,10 @@
-[gd_scene load_steps=8 format=4 uid="uid://bo1kbibiagnjc"]
+[gd_scene load_steps=9 format=4 uid="uid://bo1kbibiagnjc"]
 
 [ext_resource type="PackedScene" uid="uid://6uwyyegm8dex" path="res://Scenes/characters/player/player.tscn" id="1_fi8sl"]
 [ext_resource type="Script" uid="uid://bw8x7jnhi8krp" path="res://Scenes/test_scene/mouse_power.gd" id="1_kl1i3"]
 [ext_resource type="Texture2D" uid="uid://c2mjfisj5so6i" path="res://Assets/Visuals/Characters/player/__bg_2.png" id="1_tf2av"]
 [ext_resource type="PackedScene" uid="uid://bg5dnmvl3g5kn" path="res://Scenes/Entities/Wave/wave_spawner.tscn" id="4_kl1i3"]
+[ext_resource type="PackedScene" uid="uid://nvrkuqr2koh3" path="res://Scenes/characters/Enemies/basic_nisse.tscn" id="4_uy1to"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_lvvqt"]
 texture = ExtResource("1_tf2av")
@@ -38,7 +39,10 @@ zoom = Vector2(0.685, 0.79)
 
 [node name="Wave_spawner" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_kl1i3")]
 position = Vector2(868, 808)
+Basic_Nisse = ExtResource("4_uy1to")
 player = NodePath("../Player")
+
+[node name="TestBasicNisse" parent="Wave_spawner" instance=ExtResource("4_uy1to")]
 
 [node name="Area2D" type="Area2D" parent="."]
 script = ExtResource("1_kl1i3")

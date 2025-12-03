@@ -1,0 +1,36 @@
+[gd_scene load_steps=5 format=3 uid="uid://nvrkuqr2koh3"]
+
+[ext_resource type="Script" uid="uid://dpldvjr46r761" path="res://Scenes/characters/Enemies/basic_nisse.gd" id="1_35te3"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="1_ay5bq"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_35te3"]
+radius = 112.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gllq7"]
+radius = 16.0
+
+[node name="BasicNisse" type="CharacterBody2D"]
+script = ExtResource("1_35te3")
+
+[node name="AttackArea" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="AttackArea"]
+shape = SubResource("CircleShape2D_35te3")
+debug_color = Color(0.85895735, 0.3390183, 0.35653526, 0.41960785)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_gllq7")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_ay5bq")
+
+[node name="IdleLabel" type="Label" parent="."]
+offset_left = -40.0
+offset_top = -112.0
+offset_right = 40.0
+offset_bottom = -67.0
+theme_override_font_sizes/font_size = 32
+text = "State"
+
+[connection signal="body_entered" from="AttackArea" to="." method="_on_attack_area_entered"]
+[connection signal="body_exited" from="AttackArea" to="." method="_on_attack_area_exited"]

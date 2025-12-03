@@ -1,6 +1,6 @@
 extends Node2D
 
-@export var Basic_Wiz: PackedScene
+@export var Basic_Nisse: PackedScene
 @export var Range_Wiz: PackedScene
 @export var Self_Dest_Wiz: PackedScene
 
@@ -9,19 +9,19 @@ extends Node2D
 @export var min_spawn_radius: float = 100.0
 
 var enemy_info := {
-	"Basic_Wiz":     {"type": null, "number": 0},
+	"Basic_Nisse":     {"type": null, "number": 0},
 	"Range_Wiz":     {"type": null, "number": 0},
 	"Self_Dest_Wiz": {"type": null, "number": 0}
 }
 
 @export var waves := [
-	{ "Basic_Wiz": 3, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
-	{ "Basic_Wiz": 4, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
-	{ "Basic_Wiz": 4, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
-	{ "Basic_Wiz": 6, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
-	{ "Basic_Wiz": 8, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
-	{ "Basic_Wiz": 10, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
-	{ "Basic_Wiz": 12, "Range_Wiz": 0, "Self_Dest_Wiz": 0 }
+	{ "Basic_Nisse": 3, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
+	{ "Basic_Nisse": 4, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
+	{ "Basic_Nisse": 4, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
+	{ "Basic_Nisse": 6, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
+	{ "Basic_Nisse": 8, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
+	{ "Basic_Nisse": 10, "Range_Wiz": 0, "Self_Dest_Wiz": 0 },
+	{ "Basic_Nisse": 12, "Range_Wiz": 0, "Self_Dest_Wiz": 0 }
 ]
 
 var current_wave := 0
@@ -31,13 +31,13 @@ var total_to_spawn := 0
 var total_dead := 0
 
 func _ready():
-	enemy_info["Basic_Wiz"].type = Basic_Wiz
+	enemy_info["Basic_Nisse"].type = Basic_Nisse
 	enemy_info["Range_Wiz"].type = Range_Wiz
 	enemy_info["Self_Dest_Wiz"].type = Self_Dest_Wiz
 	print("Starting first wave.")
 	start_next_wave()
 
-func _process(delta):
+func _process(_delta):
 	if not wave_working and Input.is_action_just_pressed("ui_accept"):  # Space by default in Godot
 		resume_wave()
 
