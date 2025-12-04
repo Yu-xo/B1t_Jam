@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b16h1kvxbl52x"
-path="res://.godot/imported/characters.webp-5ee2a091eb70a8e72877efda36118941.ctex"
+uid="uid://diy0wsc7ieow"
+path="res://.godot/imported/Cooking Meter.png-35e8ca9e99ef8e9f65d4bffd9bf9cb4f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Visuals/Characters/characters.webp"
-dest_files=["res://.godot/imported/characters.webp-5ee2a091eb70a8e72877efda36118941.ctex"]
+source_file="res://Assets/Visuals/UI/1bitjam/Cooking Meter.png"
+dest_files=["res://.godot/imported/Cooking Meter.png-35e8ca9e99ef8e9f65d4bffd9bf9cb4f.ctex"]
 
 [params]
 
