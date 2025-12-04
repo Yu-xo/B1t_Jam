@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 GameManager="*res://Global/GameManager.gd"
 InventoryManager="*res://Global/Inventory_manager.gd"
+AudioManager="*res://Global/AudioManager/AudioManager.tscn"
 
 [dotnet]
 

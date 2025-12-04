@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=3 uid="uid://da38pudr004j0"]
+
+[ext_resource type="Script" uid="uid://bfjk51l3qnlub" path="res://Global/AudioManager/background_music_player.gd" id="1_2nh25"]
+[ext_resource type="AudioStream" uid="uid://cy1yqqc5w56qp" path="res://Assets/Audio/MenuMusic.wav" id="1_d16gy"]
+
+[node name="AudioManager" type="Node"]
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("1_d16gy")
+max_polyphony = 2
+script = ExtResource("1_2nh25")
+menu_music = ExtResource("1_d16gy")
+menu_start = 1.86
+menu_end = 69.31
