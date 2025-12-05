@@ -1,0 +1,182 @@
+[gd_scene load_steps=3 format=3 uid="uid://3aw0grq3bkh5"]
+
+[ext_resource type="Script" uid="uid://dqe2btn38oj6n" path="res://Scenes/Entities/Inventory/inventory.gd" id="1_7frbc"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="2_uy63a"]
+
+[node name="Inventory" type="Control" node_paths=PackedStringArray("blood_count", "bone_count", "salt_name", "salt_amount", "salt_button", "milk_name", "milk_amount", "milk_button", "honey_name", "honey_amount", "honey_button", "oats_name", "oats_amount", "oats_button")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_7frbc")
+blood_count = NodePath("Amount_Items/blood/blood_count")
+bone_count = NodePath("Amount_Items/bone/bone_count")
+salt_name = NodePath("VBoxContainer/Salt/name_of_ingredient")
+salt_amount = NodePath("VBoxContainer/Salt/amount")
+salt_button = NodePath("VBoxContainer/Salt/Button")
+milk_name = NodePath("VBoxContainer/Milk/name_of_ingredient")
+milk_amount = NodePath("VBoxContainer/Milk/amount")
+milk_button = NodePath("VBoxContainer/Milk/Button")
+honey_name = NodePath("VBoxContainer/Honey/name_of_ingredient")
+honey_amount = NodePath("VBoxContainer/Honey/amount")
+honey_button = NodePath("VBoxContainer/Honey/Button")
+oats_name = NodePath("VBoxContainer/oats/name_of_ingredient")
+oats_amount = NodePath("VBoxContainer/oats/amount")
+oats_button = NodePath("VBoxContainer/oats/Button")
+
+[node name="Amount_Items" type="HBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 698.0
+offset_top = 449.0
+offset_right = 1152.0
+offset_bottom = 639.0
+
+[node name="blood" type="TextureRect" parent="Amount_Items"]
+modulate = Color(0.47788018, 0.47788012, 0.47788012, 1)
+layout_mode = 2
+texture = ExtResource("2_uy63a")
+
+[node name="blood_count" type="RichTextLabel" parent="Amount_Items/blood"]
+layout_mode = 0
+offset_left = 151.0
+offset_top = -354.0
+offset_right = 449.0
+offset_bottom = -314.0
+text = "0"
+
+[node name="bone" type="TextureRect" parent="Amount_Items"]
+modulate = Color(0.8230325, 0.3947942, 0, 1)
+layout_mode = 2
+texture = ExtResource("2_uy63a")
+
+[node name="bone_count" type="RichTextLabel" parent="Amount_Items/bone"]
+layout_mode = 0
+offset_left = 23.0
+offset_top = -302.0
+offset_right = 317.0
+offset_bottom = -262.0
+text = "0"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 111.0
+offset_right = 134.0
+offset_bottom = 635.0
+
+[node name="Salt" type="TextureRect" parent="VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_uy63a")
+
+[node name="amount" type="RichTextLabel" parent="VBoxContainer/Salt"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 85.0
+offset_right = 526.0
+offset_bottom = 125.0
+fit_content = true
+
+[node name="name_of_ingredient" type="RichTextLabel" parent="VBoxContainer/Salt"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 22.0
+offset_right = 558.0
+offset_bottom = 62.0
+fit_content = true
+
+[node name="Button" type="Button" parent="VBoxContainer/Salt"]
+layout_mode = 0
+offset_left = 566.0
+offset_top = 62.0
+offset_right = 602.0
+offset_bottom = 93.0
+text = "salt"
+
+[node name="Milk" type="TextureRect" parent="VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_uy63a")
+
+[node name="amount" type="RichTextLabel" parent="VBoxContainer/Milk"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 85.0
+offset_right = 550.0
+offset_bottom = 125.0
+fit_content = true
+
+[node name="name_of_ingredient" type="RichTextLabel" parent="VBoxContainer/Milk"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 22.0
+offset_right = 563.0
+offset_bottom = 62.0
+fit_content = true
+
+[node name="Button" type="Button" parent="VBoxContainer/Milk"]
+layout_mode = 0
+offset_left = 566.0
+offset_top = 62.0
+offset_right = 608.0
+offset_bottom = 93.0
+text = "milk
+"
+
+[node name="Honey" type="TextureRect" parent="VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_uy63a")
+
+[node name="amount" type="RichTextLabel" parent="VBoxContainer/Honey"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 85.0
+offset_right = 566.0
+offset_bottom = 125.0
+fit_content = true
+
+[node name="name_of_ingredient" type="RichTextLabel" parent="VBoxContainer/Honey"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 22.0
+offset_right = 555.0
+offset_bottom = 62.0
+fit_content = true
+
+[node name="Button" type="Button" parent="VBoxContainer/Honey"]
+layout_mode = 0
+offset_left = 566.0
+offset_top = 62.0
+offset_right = 622.0
+offset_bottom = 93.0
+text = "honey
+"
+
+[node name="oats" type="TextureRect" parent="VBoxContainer"]
+layout_mode = 2
+texture = ExtResource("2_uy63a")
+
+[node name="amount" type="RichTextLabel" parent="VBoxContainer/oats"]
+layout_mode = 0
+offset_left = 85.0
+offset_top = 85.0
+offset_right = 543.0
+offset_bottom = 125.0
+fit_content = true
+
+[node name="name_of_ingredient" type="RichTextLabel" parent="VBoxContainer/oats"]
+layout_mode = 0
+offset_left = 130.0
+offset_top = 22.0
+offset_right = 564.0
+offset_bottom = 62.0
+fit_content = true
+
+[node name="Button" type="Button" parent="VBoxContainer/oats"]
+layout_mode = 0
+offset_left = 566.0
+offset_top = 62.0
+offset_right = 608.0
+offset_bottom = 93.0
+text = "oats
+"
