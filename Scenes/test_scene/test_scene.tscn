@@ -1,8 +1,13 @@
+[gd_scene load_steps=13 format=4 uid="uid://bo1kbibiagnjc"]
 [gd_scene load_steps=10 format=4 uid="uid://bo1kbibiagnjc"]
 
 [ext_resource type="PackedScene" uid="uid://6uwyyegm8dex" path="res://Scenes/characters/player/player.tscn" id="1_fi8sl"]
 [ext_resource type="Script" uid="uid://bw8x7jnhi8krp" path="res://Scenes/test_scene/mouse_power.gd" id="1_kl1i3"]
 [ext_resource type="Texture2D" uid="uid://c2mjfisj5so6i" path="res://Assets/Visuals/Characters/player/__bg_2.png" id="1_tf2av"]
+[ext_resource type="PackedScene" uid="uid://bg5dnmvl3g5kn" path="res://Scenes/Entities/Wave/wave_spawner.tscn" id="4_kl1i3"]
+[ext_resource type="PackedScene" uid="uid://nvrkuqr2koh3" path="res://Scenes/characters/Enemies/basic_nisse.tscn" id="4_uy1to"]
+[ext_resource type="Script" uid="uid://dpldvjr46r761" path="res://Scenes/characters/Enemies/basic_nisse.gd" id="5_dyo71"]
+[ext_resource type="Texture2D" uid="uid://4q335xxs2p" path="res://icon.svg" id="6_gr86d"]
 [ext_resource type="PackedScene" uid="uid://dyulx031m8oy" path="res://Scenes/Entities/collectable_items/blood.tscn" id="4_uy1to"]
 [ext_resource type="PackedScene" uid="uid://3aw0grq3bkh5" path="res://Scenes/Entities/Inventory/inventory.tscn" id="5_dyo71"]
 [ext_resource type="PackedScene" uid="uid://55icam7ncwbj" path="res://Scenes/Entities/collectable_items/bones.tscn" id="5_x0nsy"]
@@ -16,6 +21,12 @@ texture = ExtResource("1_tf2av")
 
 [sub_resource type="TileSet" id="TileSet_kl1i3"]
 sources/0 = SubResource("TileSetAtlasSource_lvvqt")
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_35te3"]
+radius = 112.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_gllq7"]
+radius = 16.0
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_uy1to"]
 size = Vector2(134, 144)
@@ -34,6 +45,42 @@ speed = 300
 position = Vector2(-32, 122)
 zoom = Vector2(0.615, 0.585)
 
+[node name="spawn_cam" type="Camera2D" parent="."]
+position = Vector2(943, 510)
+zoom = Vector2(0.685, 0.79)
+
+[node name="Wave_spawner" parent="." node_paths=PackedStringArray("player") instance=ExtResource("4_kl1i3")]
+position = Vector2(868, 808)
+Basic_Nisse = ExtResource("4_uy1to")
+player = NodePath("../Player")
+
+[node name="TestBasicNisse" parent="Wave_spawner" instance=ExtResource("4_uy1to")]
+
+[node name="TestFastNisse" type="CharacterBody2D" parent="Wave_spawner"]
+script = ExtResource("5_dyo71")
+move_speed = 200.0
+attack_damage = 3
+
+[node name="AttackArea" type="Area2D" parent="Wave_spawner/TestFastNisse"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wave_spawner/TestFastNisse/AttackArea"]
+shape = SubResource("CircleShape2D_35te3")
+debug_color = Color(0.85895735, 0.3390183, 0.35653526, 0.41960785)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Wave_spawner/TestFastNisse"]
+shape = SubResource("CircleShape2D_gllq7")
+
+[node name="Sprite2D" type="Sprite2D" parent="Wave_spawner/TestFastNisse"]
+texture = ExtResource("6_gr86d")
+
+[node name="IdleLabel" type="Label" parent="Wave_spawner/TestFastNisse"]
+offset_left = -40.0
+offset_top = -112.0
+offset_right = 40.0
+offset_bottom = -67.0
+theme_override_font_sizes/font_size = 32
+text = "State"
+
 [node name="Area2D" type="Area2D" parent="."]
 script = ExtResource("1_kl1i3")
 
@@ -41,6 +88,8 @@ script = ExtResource("1_kl1i3")
 shape = SubResource("RectangleShape2D_uy1to")
 debug_color = Color(0, 0, 0, 0.41960785)
 
+[connection signal="body_entered" from="Wave_spawner/TestFastNisse/AttackArea" to="Wave_spawner/TestFastNisse" method="_on_attack_area_entered"]
+[connection signal="body_exited" from="Wave_spawner/TestFastNisse/AttackArea" to="Wave_spawner/TestFastNisse" method="_on_attack_area_exited"]
 [node name="blood" parent="." instance=ExtResource("4_uy1to")]
 position = Vector2(1111, 365)
 
