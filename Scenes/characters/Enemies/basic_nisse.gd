@@ -87,7 +87,7 @@ func take_damage(amount: int, from: Node2D = null):
 
 func die():
 	print("Enemy die() called")
-	emit_signal("is_dead")       # <<< VERY IMPORTANT
+	emit_signal("is_dead")     
 	_spawn_drop()
 	queue_free()
 
@@ -106,6 +106,6 @@ func _spawn_drop():
 		return
 
 	var drop = scene_to_spawn.instantiate()
-	get_tree().current_scene.add_child(drop)
+	get_parent().add_child(drop)
 	drop.global_position = global_position
 	print("Drop spawned at:", drop.global_position)

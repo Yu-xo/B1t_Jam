@@ -1,37 +1,14 @@
 extends Node2D
 
-@export var stage_scene_path: String = "res://StageScene.tscn"
+@export var safe_scene_path := "res://Scenes/UI/selection_scene.tscn"
 
-func _ready():
-	get_tree().paused = false   # safe zone never pauses
-	print("Entered Safe Zone")
+func _on_body_entered(body):
+	if not body.is_in_group("player"):
+		return
 
-	# Make sure player never stays in paused mode from stage scene
-	var player = get_tree().get_first_node_in_group("player")
-	if player:
-		player.in_safe_zone = false  # will change when entering RitualZone
+	if not GameData.all_waves_cleared:
+		print("Cannot enter safe zone yet — waves remain.")
+		return
 
-
-func _process(delta):
-	# Press Space to go back to stage scene
-	if Input.is_action_just_pressed("ui_accept"):
-		_go_back_to_stage()
-
-
-func _go_back_to_stage():
-	get_tree().change_scene_to_file(stage_scene_path)
-
-
-# ======================================================
-# RITUAL ZONE LOGIC
-# ======================================================
-func _on_ritual_zone_body_entered(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		body.in_safe_zone = true
-		print("Player entered ritual zone → inventory donations ENABLED")
-
-
-func _on_ritual_zone_body_exited(body: Node2D) -> void:
-	if body.is_in_group("player"):
-		body.in_safe_zone = false
-		print("Player left ritual zone → inventory donations DISABLED")
+	print("Entering Safe Zone...")
+	get_tree().change_scene_to_file(safe_scene_path)

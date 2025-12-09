@@ -189,8 +189,7 @@ func generate_random_ranges() -> void:
 
 
 # === Draws the colored score regions ===
-func visualize_ranges() -> void:
-	var bar_width: float = bar.texture.get_width()
+func visualize_ranges() -> void:	var bar_width: float = bar.texture.get_width()
 	var bar_height: float = bar.texture.get_height()
 
 	# Hide all first

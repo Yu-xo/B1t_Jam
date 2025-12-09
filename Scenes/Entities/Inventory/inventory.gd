@@ -1,7 +1,7 @@
 extends Control
 
 # ====================================================================
-# EXPORTS
+# EXPORTS – UI ELEMENTS
 # ====================================================================
 
 @export var blood_count: RichTextLabel
@@ -10,118 +10,99 @@ extends Control
 @export var salt_name: RichTextLabel
 @export var salt_amount: RichTextLabel
 @export var salt_button: Button
+@export var salt_bar: TextureProgressBar
 
 @export var milk_name: RichTextLabel
 @export var milk_amount: RichTextLabel
 @export var milk_button: Button
+@export var milk_bar: TextureProgressBar
 
 @export var honey_name: RichTextLabel
 @export var honey_amount: RichTextLabel
 @export var honey_button: Button
+@export var honey_bar: TextureProgressBar
 
 @export var oats_name: RichTextLabel
 @export var oats_amount: RichTextLabel
 @export var oats_button: Button
-
-@export var fill_duration := 0.3
-@export var bounce_scale := Vector2(1.3, 1.3)
-@export var bounce_duration := 0.15
-@export var max_progress := 10
-
-@export var salt_bar: TextureProgressBar
-@export var milk_bar: TextureProgressBar
-@export var honey_bar: TextureProgressBar
 @export var oats_bar: TextureProgressBar
 
 @onready var move_to_cooking_game: Button = $Move_to_cooking_game
+@onready var ritual_status_label: RichTextLabel = $RitualStatus 
 
-# ====================================================================
-# GLOBAL INVENTORY DATA
-# ====================================================================
-
-var blood_arr := GameData.blood_arr
-var bone_arr := GameData.bone_arr
-
-var completed_ingredients := GameData.completed_ingredients
-var progress_values := GameData.progress_values
+@export var fill_duration := 0.3
+@export var bounce_scale := Vector2(1.2, 1.2)
+@export var bounce_duration := 0.12
 
 @export var ingredient_requirements := {
 	"salt": {"bones": 5, "blood": 3},
-	"oats": {"bones": 7, "blood": 7},
 	"milk": {"bones": 4, "blood": 10},
 	"honey": {"bones": 7, "blood": 7},
+	"oats": {"bones": 7, "blood": 7},
 }
 
-# ====================================================================
-# READY
-# ====================================================================
+# Quick alias to GameData arrays & maps
+var blood_arr := GameData.blood_arr
+var bone_arr := GameData.bone_arr
+var completed := GameData.completed_ingredients
+var progress := GameData.progress_values
+
+# For convenience
+var max_progress :float= GameData.max_progress
+
+
 func _ready():
-	visible = false  # UI STARTS HIDDEN
+	visible = false                      # starts hidden, shown by Player when E is pressed
 	add_to_group("inventory_ui")
-	_setup_ingredient_ui()
+
+	_setup_bars_from_gamedata()
+	_setup_ingredient_text()
 	_connect_buttons()
-	_setup_progress_bars()
+	update_inventory_ui()
+	_check_all_completed()
+
+
+func _process(delta: float) -> void:
+	# Keep counts refreshed even if items picked while UI is open
 	update_inventory_ui()
 
 
-func _process(delta):
-	_handle_visibility_controls()
-
-	# disable buttons unless inside safe zone
-	var player = get_tree().get_first_node_in_group("player")
-	if not player: return
-
-	var allow = player.in_safe_zone
-
-	salt_button.disabled = not allow or completed_ingredients["salt"]
-	milk_button.disabled = not allow or completed_ingredients["milk"]
-	honey_button.disabled = not allow or completed_ingredients["honey"]
-	oats_button.disabled = not allow or completed_ingredients["oats"]
-
-
-# ====================================================================
-# INPUT → SHOW / HIDE UI
-# ====================================================================
-func _handle_visibility_controls():
-	# If E pressed → open
 	if Input.is_action_just_pressed("open_inventory"):
 		visible = true
-		update_inventory_ui()
-
-	# If Q pressed → close
 	if Input.is_action_just_pressed("close_inventory"):
 		visible = false
 
 
-# ====================================================================
-# UI SETUP
-# ====================================================================
-
-func _setup_progress_bars():
+func _setup_bars_from_gamedata():
+	# Set max values
 	salt_bar.max_value = max_progress
 	milk_bar.max_value = max_progress
 	honey_bar.max_value = max_progress
 	oats_bar.max_value = max_progress
 
+	# Apply saved progress
+	salt_bar.value = progress["salt"]
+	milk_bar.value = progress["milk"]
+	honey_bar.value = progress["honey"]
+	oats_bar.value = progress["oats"]
 
-func _setup_ingredient_ui():
-	_set_text("salt", salt_amount)
-	_set_text("milk", milk_amount)
-	_set_text("honey", honey_amount)
-	_set_text("oats", oats_amount)
+
+func _setup_ingredient_text():
+	_set_ingredient_ui("salt", salt_name, salt_amount)
+	_set_ingredient_ui("milk", milk_name, milk_amount)
+	_set_ingredient_ui("honey", honey_name, honey_amount)
+	_set_ingredient_ui("oats", oats_name, oats_amount)
 
 
-func _set_text(key, label):
-	if completed_ingredients[key]:
-		label.text = ""
+func _set_ingredient_ui(key: String, name_label: RichTextLabel, amount_label: RichTextLabel):
+	name_label.text = key.capitalize()
+
+	if completed[key]:
+		amount_label.text = "[center][color=lime]Completed[/color][/center]"
 	else:
-		var r = ingredient_requirements[key]
-		label.text = "Needs %s Bones + %s Blood Drops" % [r.bones, r.blood]
+		var req = ingredient_requirements[key]
+		amount_label.text = "Needs %s Bones + %s Blood Drops" % [req.bones, req.blood]
 
-
-# ====================================================================
-# DONATION
-# ====================================================================
 
 func _connect_buttons():
 	salt_button.pressed.connect(func(): _donate("salt", salt_amount, salt_button, salt_bar))
@@ -129,64 +110,98 @@ func _connect_buttons():
 	honey_button.pressed.connect(func(): _donate("honey", honey_amount, honey_button, honey_bar))
 	oats_button.pressed.connect(func(): _donate("oats", oats_amount, oats_button, oats_bar))
 
+	# Apply disabled state from GameData
+	salt_button.disabled = completed["salt"]
+	milk_button.disabled = completed["milk"]
+	honey_button.disabled = completed["honey"]
+	oats_button.disabled = completed["oats"]
 
-func _donate(key, ui_label, button, bar):
+
+
+# DONATION LOGIC + ANIMATIONS
+
+
+func _donate(key: String, ui_label: RichTextLabel, button: Button, bar: TextureProgressBar):
 	var player = get_tree().get_first_node_in_group("player")
+	if not player:
+		print("No player found.")
+		return
 
+	# Only allow donating in safe ritual zone
 	if not player.in_safe_zone:
-		print("Must be inside ritual/safe zone to donate!")
+		print("You must be in the ritual zone to donate.")
+		return
+
+	if completed[key]:
+		print("%s already completed." % key)
 		return
 
 	var req = ingredient_requirements[key]
 
+	# Check resources from GameData arrays
 	if bone_arr.size() < req.bones or blood_arr.size() < req.blood:
-		print("Not enough items to submit ", key)
+		print("Not enough resources for %s" % key)
 		return
 
-	# Deduct items
-	for i in range(req.bones): bone_arr.pop_back()
-	for i in range(req.blood): blood_arr.pop_back()
+	# Deduct bones
+	for i in range(req.bones):
+		if bone_arr.is_empty(): break
+		bone_arr.pop_back()
 
-	progress_values[key] = max_progress
-	animate_bar(bar, max_progress)
-	bounce_bar(bar)
+	# Deduct blood
+	for i in range(req.blood):
+		if blood_arr.is_empty(): break
+		blood_arr.pop_back()
 
-	completed_ingredients[key] = true
-	ui_label.text = ""
+	# Update progress value and animate bar
+	progress[key] = max_progress
+	_animate_bar(bar, progress[key])
+	_bounce_bar(bar)
+
+	# Mark ingredient completed
+	completed[key] = true
+	ui_label.text = "[center][color=lime]Completed[/color][/center]"
 	button.disabled = true
 
 	update_inventory_ui()
 	_check_all_completed()
 
+	print("Donated for %s | Blood: %d, Bones: %d" % [key, blood_arr.size(), bone_arr.size()])
 
-# ====================================================================
-# ANIMATIONS
-# ====================================================================
-func animate_bar(bar, value):
+
+func _animate_bar(bar: TextureProgressBar, new_value: float):
 	var t = create_tween()
-	t.tween_property(bar, "value", value, fill_duration)
+	t.tween_property(bar, "value", new_value, fill_duration).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
 
 
-func bounce_bar(bar):
-	var t = create_tween()
-	t.tween_property(bar, "scale", bounce_scale, bounce_duration)
-	t.tween_property(bar, "scale", Vector2.ONE, bounce_duration)
+func _bounce_bar(bar: TextureProgressBar):
+	pass
 
 
-# ====================================================================
-# END CHECK / SCENE MOVE
-# ====================================================================
-func _check_all_completed():
-	for k in completed_ingredients:
-		if not completed_ingredients[k]:
-			move_to_cooking_game.disabled = true
-			return
-	move_to_cooking_game.disabled = false
+
+# INVENTORY COUNTS
 
 
 func update_inventory_ui():
-	blood_count.text = "Blood: %s" % blood_arr.size()
-	bone_count.text = "Bones: %s" % bone_arr.size()
+	blood_count.text = "Blood: [b]%s[/b]" % blood_arr.size()
+	bone_count.text = "Bones: [b]%s[/b]" % bone_arr.size()
+
+
+
+# RITUAL UNLOCK SYSTEM
+
+
+func _check_all_completed():
+	for key in completed.keys():
+		if not completed[key]:
+			move_to_cooking_game.disabled = true
+			if is_instance_valid(ritual_status_label):
+				ritual_status_label.text = "[center][color=red]Ritual Locked[/color][/center]"
+			return
+
+	move_to_cooking_game.disabled = false
+	if is_instance_valid(ritual_status_label):
+		ritual_status_label.text = "[center][color=lime]Ritual Unlocked![/color][/center]"
 
 
 func _on_Move_to_cooking_game_pressed():

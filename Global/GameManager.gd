@@ -2,7 +2,10 @@ extends Node
 
 var blood_arr: Array = []
 var bone_arr: Array = []
-var wave_paused: bool = false
+var max_progress: int = 10
+var all_waves_cleared := false
+
+var prevent_drops: bool = false
 
 var completed_ingredients := {
 	"salt": false,
@@ -18,8 +21,8 @@ var progress_values := {
 	"honey": 0,
 }
 
-var current_wave: int = 0   # <-- track which wave we’re on globally
 
+var wave_paused: bool = false
 
 func reset_all():
 	blood_arr.clear()
@@ -31,6 +34,4 @@ func reset_all():
 	for k in progress_values:
 		progress_values[k] = 0
 
-	current_wave = 0
-
-	print("GameData reset completed.")
+	wave_paused = false  # reset wave pause state

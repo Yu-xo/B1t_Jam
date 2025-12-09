@@ -5,10 +5,14 @@
 [sub_resource type="GDScript" id="GDScript_3w2t7"]
 script/source = "extends Node2D
 
-@export var item_type := \"bone\"
+@export var item_type: String = \"bone\"   # \"blood\" or \"bone\"
 
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	connect(\"body_entered\", Callable(self, \"_on_body_entered\"))
+	
+
+
 
 
 
