@@ -1,14 +1,19 @@
-[gd_scene load_steps=3 format=3 uid="uid://da38pudr004j0"]
+[gd_scene load_steps=4 format=3 uid="uid://da38pudr004j0"]
 
 [ext_resource type="Script" uid="uid://bfjk51l3qnlub" path="res://Global/AudioManager/background_music_player.gd" id="1_2nh25"]
 [ext_resource type="AudioStream" uid="uid://cy1yqqc5w56qp" path="res://Assets/Audio/MenuMusic.wav" id="1_d16gy"]
+[ext_resource type="AudioStream" uid="uid://dqdjmqnw512cf" path="res://Assets/Audio/InsideMusic.wav" id="3_m5imk"]
 
 [node name="AudioManager" type="Node"]
 
-[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+[node name="BackgroundMusicPlayer" type="AudioStreamPlayer" parent="."]
 stream = ExtResource("1_d16gy")
 max_polyphony = 2
 script = ExtResource("1_2nh25")
 menu_music = ExtResource("1_d16gy")
+menu_volume = 0.7
 menu_start = 1.86
 menu_end = 69.31
+inside_music = ExtResource("3_m5imk")
+inside_volume = 0.9
+inside_end = 124.9
